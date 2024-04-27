@@ -1,6 +1,7 @@
 streamlit
 numpy
 pandas
+python-dotenv
 # jupyter notebook
 jupyter
 # 시각화
@@ -9,6 +10,7 @@ matplotlib
 seaborn
 # 통계분석
 scipy
+openpyxl
 # 머신러닝
 scikit-learn
 xgboost
