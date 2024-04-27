@@ -1,0 +1,39 @@
+streamlit
+numpy
+pandas
+# jupyter notebook
+jupyter
+# 시각화
+plotly
+matplotlib
+seaborn
+# 통계분석
+scipy
+# 머신러닝
+scikit-learn
+xgboost
+# 거대언어모델 연계
+#transformers
+#sentencepiece
+#torch
+# 자연어처리
+konlpy
+# 이미지처리
+opencv-python
+# 웹크롤링
+beautifulsoup4
+requests
+# 데이터베이스
+#pymongo
+# 시계열분석
+statsmodels
+# 딥러닝
+#tensorflow
+#keras
+# 웹프레임워크
+#flask
+# 웹호스팅
+#gunicorn
+# 웹서버
+#nginx
+
