@@ -126,9 +126,13 @@ elif st.session_state.menu == '생활 폐기물 데이터 현황':
     
     fig, ax = plt.subplots()
     ax.barh(top_cities_data['시도'], top_cities_data['전체발생량'], color='green')
-    ax.set_title('폐기물 발생량 상위 10개 시도', fontproperties=font_prop)
-    ax.set_ylabel('시도', fontproperties=font_prop)
-    ax.set_xlabel('전체 발생량 (톤)', fontproperties=font_prop)
+    
+    # 폰트 설정을 위한 fontdict 생성
+    fontdict = {'fontsize': 12, 'fontweight': 'bold', 'fontname': font_prop.get_name()}
+    
+    ax.set_title('폐기물 발생량 상위 10개 시도', fontdict=fontdict)
+    ax.set_ylabel('시도', fontdict=fontdict)
+    ax.set_xlabel('전체 발생량 (톤)', fontdict=fontdict)
     ax.tick_params(axis='y', rotation=0)  # y축 레이블 회전
     st.pyplot(fig)
 
@@ -179,7 +183,7 @@ elif st.session_state.menu == '지역별 비교 분석':
         city_data_year[treatment_methods].plot(kind='bar', stacked=True, ax=ax)
         ax.set_title(f'{year}년 주요 도시별 폐기물 처리 방법 비교', fontproperties=font_prop)
         ax.set_ylabel('발생량 (천 톤)', fontproperties=font_prop)
-        ax.legend(title='처리 방법', prop=font_prop)
+        ax.legend(prop=font_prop)
 
     plt.xlabel('시도', fontproperties=font_prop)
     plt.xticks(rotation=45, fontproperties=font_prop)
