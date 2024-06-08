@@ -2,6 +2,9 @@
 - aSSIST(Seoul School of Integrated Sciences &amp; Technologies)의 AI 빅데이터 석사과정 9기(9-1,2) 빅데이터플랫폼 구축 강의 1조 리포지터리
 - BDAV1는 "Big Data Analytics and Visualization Team 1"의 약자로, 환경관련 빅 데이터 분석과 시각화에 초점을 맞추어 자연환경을 보호하고 자원순환이 모두에게 이롭게 되도록하는 인사이트를 제공하려고 함.
 
+## 배포사이트
+- [배포사이트](https://assist-bdav1.streamlit.app/)
+
 ## 로컬 환경에 리포지터리 클론
 - [GitHub 리포지터리 페이지](https://github.com/arkwith7/BDAV1)로 이동.
 - Code 버튼 클릭 후 나타나는 URL 복사.
