@@ -1,12 +1,29 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import urllib.request
+import os
 
 # 데이터 로드
 @st.cache_data
 def load_data():
     data = pd.read_csv('data/combined_data.csv')
     return data
+
+# 한글 폰트 다운로드 및 설정
+@st.cache_resource
+def get_font():
+    font_url = "https://fonts.gstatic.com/ea/nanumgothic/v5/NanumGothic-Regular.ttf"
+    font_path = "NanumGothic-Regular.ttf"
+    if not os.path.exists(font_path):
+        urllib.request.urlretrieve(font_url, font_path)
+    return font_path
+
+font_path = get_font()
+font_prop = fm.FontProperties(fname=font_path)
+plt.rcParams['font.family'] = font_prop.get_name()
+plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 # CSS 스타일 추가
 st.markdown("""
@@ -27,14 +44,6 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
-
-# 폰트 경로 설정
-font_path = '/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf'
-
-# 폰트 설정
-plt.rcParams['font.family'] = 'NanumBarunGothic'
-plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
-
 
 # 사이드바 메뉴 상태 초기화
 if 'menu' not in st.session_state:
