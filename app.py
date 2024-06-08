@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
-import urllib.request
 import os
 
 # 데이터 로드
@@ -12,17 +11,9 @@ def load_data():
     return data
 
 # 한글 폰트 다운로드 및 설정
-@st.cache_resource
-def get_font():
-    font_url = "https://fonts.gstatic.com/ea/nanumgothic/v5/NanumGothic-Regular.ttf"
-    font_path = "NanumGothic-Regular.ttf"
-    if not os.path.exists(font_path):
-        urllib.request.urlretrieve(font_url, font_path)
-    return font_path
-
-font_path = get_font()
+font_path = os.path.join(os.getcwd(), "Nanum_Gothic/NanumGothic-Bold.ttf")
 font_prop = fm.FontProperties(fname=font_path)
-plt.rcParams['font.family'] = font_prop.get_name()
+plt.rc('font', family=font_prop.get_name())
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 # CSS 스타일 추가
