@@ -94,6 +94,7 @@ elif st.session_state.menu == '생활 폐기물 데이터 현황':
             selected_data = data[selected_columns]
             st.dataframe(selected_data)
 
+    st.subheader('년도별 전국 생활 폐기물 발생량 추이')
     # '시도'가 '전국'인 데이터만 필터링
     national_data = data[data['시도'] == '전국']
 
@@ -113,6 +114,24 @@ elif st.session_state.menu == '생활 폐기물 데이터 현황':
 
     # 스트림릿에 차트 표시
     st.pyplot(fig)
+
+    st.subheader('폐기물 발생량 상위 10개 시도')
+    # 폐기물 발생량 상위 10개 시도 표시
+    # '전국' 데이터 제외
+    data = data[data['시도'] != '전국']
+    top_cities_data = data.groupby('시도')['전체발생량'].sum().nlargest(10).reset_index()
+    
+    # 발생량에 따라 데이터를 내림차순으로 정렬
+    top_cities_data = top_cities_data.sort_values(by='전체발생량', ascending=True)
+    
+    fig, ax = plt.subplots()
+    ax.barh(top_cities_data['시도'], top_cities_data['전체발생량'], color='green')
+    ax.set_title('폐기물 발생량 상위 10개 시도', fontproperties=font_prop)
+    ax.set_ylabel('시도', fontproperties=font_prop)
+    ax.set_xlabel('전체 발생량 (톤)', fontproperties=font_prop)
+    ax.tick_params(axis='y', rotation=0)  # y축 레이블 회전
+    st.pyplot(fig)
+
 elif st.session_state.menu == '폐기물 처리 방법별 발생량 추이 분석':
     st.title('폐기물 처리 방법별 연도별 추이')
     st.write('재활용, 소각, 매립의 연도별 추이를 각각 분석하고 시각화합니다.')
@@ -163,7 +182,7 @@ elif st.session_state.menu == '지역별 비교 분석':
         ax.legend(title='처리 방법', prop=font_prop)
 
     plt.xlabel('시도', fontproperties=font_prop)
-    plt.xticks(rotation=45)
+    plt.xticks(rotation=45, fontproperties=font_prop)
     plt.tight_layout()
 
     # 스트림릿에 차트 표시
