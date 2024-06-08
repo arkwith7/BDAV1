@@ -13,8 +13,8 @@ def load_data():
 # 한글 폰트 다운로드 및 설정
 font_path = os.path.join(os.getcwd(), "Nanum_Gothic/NanumGothic-Bold.ttf")
 font_prop = fm.FontProperties(fname=font_path)
-# plt.rc('font', family=font_prop.get_name())
-# plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
+plt.rc('font', family=font_prop.get_name())
+plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 # CSS 스타일 추가
 st.markdown("""
@@ -46,6 +46,10 @@ if st.sidebar.button('소개'):
     st.session_state.menu = '소개'
 if st.sidebar.button('생활 폐기물 데이터 현황'):
     st.session_state.menu = '생활 폐기물 데이터 현황'
+if st.sidebar.button('폐기물 처리 방법별 발생량 추이 분석'):
+    st.session_state.menu = '폐기물 처리 방법별 발생량 추이 분석'
+if st.sidebar.button('지역별 비교 분석'):
+    st.session_state.menu = '지역별 비교 분석'
 
 # 선택된 메뉴에 따라 컨텐츠 표시
 if st.session_state.menu == '소개':
@@ -102,10 +106,66 @@ elif st.session_state.menu == '생활 폐기물 데이터 현황':
     ax.plot(yearly_totals['발생년도'], yearly_totals['전체발생량'], color='red', marker='o', label='추이')
 
     # 차트 제목 및 레이블 설정
-    ax.set_title('년도별 전국 폐기물 전체 발생현황 추이',fontproperties=font_prop)
-    ax.set_xlabel('년도',fontproperties=font_prop)
-    ax.set_ylabel('전체 발생량 (톤)',fontproperties=font_prop)
-    ax.legend()
+    ax.set_title('년도별 전국 폐기물 전체 발생현황 추이', fontproperties=font_prop)
+    ax.set_xlabel('년도', fontproperties=font_prop)
+    ax.set_ylabel('전체 발생량 (톤)', fontproperties=font_prop)
+    ax.legend(prop=font_prop)
 
     # 스트림릿에 차트 표시
     st.pyplot(fig)
+elif st.session_state.menu == '폐기물 처리 방법별 발생량 추이 분석':
+    st.title('폐기물 처리 방법별 연도별 추이')
+    st.write('재활용, 소각, 매립의 연도별 추이를 각각 분석하고 시각화합니다.')
+    data = load_data()
+
+    # 연도별 폐기물 처리 방법별 발생량 추이 분석
+    treatment_methods = ['총계_재활용', '총계_소각', '총계_매립']
+    yearly_treatment_data = data.groupby('발생년도')[treatment_methods].sum().reset_index()
+
+    # 시각화: 연도별 폐기물 처리 방법별 발생량 추이
+    fig, ax = plt.subplots()
+
+    for method in treatment_methods:
+        ax.plot(yearly_treatment_data['발생년도'], yearly_treatment_data[method], marker='o', label=method)
+
+    ax.set_title('연도별 폐기물 처리 방법별 발생량 추이', fontproperties=font_prop)
+    ax.set_xlabel('발생년도', fontproperties=font_prop)
+    ax.set_ylabel('발생량 (천 톤)', fontproperties=font_prop)
+    ax.legend(prop=font_prop)
+    ax.grid(True)
+
+    # 스트림릿에 차트 표시
+    st.pyplot(fig)
+elif st.session_state.menu == '지역별 비교 분석':
+    st.title('지역별 폐기물 발생량 비교 분석')
+    st.write('서울, 부산, 대구 등 주요 도시의 폐기물 발생량과 처리 방법을 비교하고 시각화해 보겠습니다.')
+    data = load_data()
+
+    # 주요 도시들의 데이터 추출
+    major_cities = ['서울', '부산', '대구', '인천', '광주', '대전', '울산']
+    major_cities_data = data[data['시도'].isin(major_cities)]
+    treatment_methods = ['총계_재활용', '총계_소각', '총계_매립']
+
+    # 주요 도시별 폐기물 발생량 및 처리 방법 분석
+    city_treatment_data = major_cities_data.groupby(['시도', '발생년도'])[treatment_methods].sum().reset_index()
+
+    # 시각화: 주요 도시별 폐기물 처리 방법 비교 (2014년과 2021년을 예로 들어보겠습니다.)
+    fig, axes = plt.subplots(nrows=2, ncols=1, sharex=True)
+
+    for i, year in enumerate([2014, 2021]):
+        city_data_year = city_treatment_data[city_treatment_data['발생년도'] == year]
+        city_data_year = city_data_year.set_index('시도')
+
+        ax = axes[i]
+        city_data_year[treatment_methods].plot(kind='bar', stacked=True, ax=ax)
+        ax.set_title(f'{year}년 주요 도시별 폐기물 처리 방법 비교', fontproperties=font_prop)
+        ax.set_ylabel('발생량 (천 톤)', fontproperties=font_prop)
+        ax.legend(title='처리 방법', prop=font_prop)
+
+    plt.xlabel('시도', fontproperties=font_prop)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # 스트림릿에 차트 표시
+    st.pyplot(fig)
+
