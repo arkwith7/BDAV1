@@ -13,8 +13,8 @@ def load_data():
 # 한글 폰트 다운로드 및 설정
 font_path = os.path.join(os.getcwd(), "Nanum_Gothic/NanumGothic-Bold.ttf")
 font_prop = fm.FontProperties(fname=font_path)
-plt.rc('font', family=font_prop.get_name())
-plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
+# plt.rc('font', family=font_prop.get_name())
+# plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 # CSS 스타일 추가
 st.markdown("""
@@ -102,9 +102,9 @@ elif st.session_state.menu == '생활 폐기물 데이터 현황':
     ax.plot(yearly_totals['발생년도'], yearly_totals['전체발생량'], color='red', marker='o', label='추이')
 
     # 차트 제목 및 레이블 설정
-    ax.set_title('년도별 전국 폐기물 전체 발생현황 추이')
-    ax.set_xlabel('년도')
-    ax.set_ylabel('전체 발생량 (톤)')
+    ax.set_title('년도별 전국 폐기물 전체 발생현황 추이',fontproperties=font_prop)
+    ax.set_xlabel('년도',fontproperties=font_prop)
+    ax.set_ylabel('전체 발생량 (톤)',fontproperties=font_prop)
     ax.legend()
 
     # 스트림릿에 차트 표시
