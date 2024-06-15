@@ -93,7 +93,10 @@ ax.barh(top_cities_data['시도'], top_cities_data['전체발생량'], color='gr
 ax.set_title('폐기물 발생량 상위 10개 시도', fontproperties=font_prop)
 ax.set_ylabel('시도', fontproperties=font_prop)
 ax.set_xlabel('전체 발생량 (톤)', fontproperties=font_prop)
-ax.tick_params(axis='y', rotation=0)  # y축 레이블 회전
+# y축 tick labels에 폰트 적용
+ax.set_yticklabels(top_cities_data['시도'], fontproperties=font_prop)
+
+ax.tick_params(axis='y', rotation=90)  # y축 레이블 회전
 
 st.pyplot(fig)
 
