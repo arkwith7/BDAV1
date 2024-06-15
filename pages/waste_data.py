@@ -96,7 +96,7 @@ ax.set_xlabel('전체 발생량 (톤)', fontproperties=font_prop)
 # y축 tick labels에 폰트 적용
 ax.set_yticklabels(top_cities_data['시도'], fontproperties=font_prop)
 
-ax.tick_params(axis='y', rotation=90)  # y축 레이블 회전
+ax.tick_params(axis='y', rotation=45)  # y축 레이블 회전
 
 st.pyplot(fig)
 
