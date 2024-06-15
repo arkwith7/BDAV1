@@ -89,13 +89,12 @@ top_cities_data = top_cities_data.sort_values(by='전체발생량', ascending=Tr
 fig, ax = plt.subplots()
 ax.barh(top_cities_data['시도'], top_cities_data['전체발생량'], color='green')
     
-# 폰트 설정을 위한 fontdict 생성
-fontdict = {'fontsize': 12, 'fontweight': 'bold', 'fontname': font_prop.get_name()}
-    
-ax.set_title('폐기물 발생량 상위 10개 시도', fontdict=fontdict)
-ax.set_ylabel('시도', fontdict=fontdict)
-ax.set_xlabel('전체 발생량 (톤)', fontdict=fontdict)
+# 폰트 설정을 위한 fontproperties 사용
+ax.set_title('폐기물 발생량 상위 10개 시도', fontproperties=font_prop)
+ax.set_ylabel('시도', fontproperties=font_prop)
+ax.set_xlabel('전체 발생량 (톤)', fontproperties=font_prop)
 ax.tick_params(axis='y', rotation=0)  # y축 레이블 회전
+
 st.pyplot(fig)
 
 # Redirect to app.py if not logged in, otherwise show the navigation menu
