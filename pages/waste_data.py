@@ -20,7 +20,7 @@ def load_summary_data():
     return data
 
 # 한글 폰트 다운로드 및 설정
-font_path = os.path.join(os.getcwd(), "Nanum_Gothic/NanumGothic-Bold.ttf")
+font_path = os.path.join(os.getcwd(), "./Nanum_Gothic/NanumGothic-Bold.ttf")
 font_prop = fm.FontProperties(fname=font_path)
 plt.rc('font', family=font_prop.get_name())
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
