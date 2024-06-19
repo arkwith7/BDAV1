@@ -17,6 +17,39 @@ def load_data():
     data = pd.read_csv('data/data_cleaned_augmented.csv')
     return data
 
+# 모델 학습
+@st.cache_resource
+def train_models():
+    data = load_data()
+
+    # Encode categorical variables
+    le_sido = LabelEncoder()
+    le_sigungu = LabelEncoder()
+
+    data['시도_encoded'] = le_sido.fit_transform(data['시도'])
+    data['시군구_encoded'] = le_sigungu.fit_transform(data['시군구'])
+
+    # Define features and targets
+    features = ['발생년도', '시도_encoded', '시군구_encoded']
+    targets = ['전체발생량', '총계_재활용', '총계_소각', '총계_매립']
+    X = data[features]
+    y = data[targets]
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train models
+    models = {}
+    for target in targets:
+        model = xgb.XGBRegressor(objective='reg:squarederror', random_state=42)
+        model.fit(X_train, y_train[target])
+        models[target] = model
+
+    return models, le_sido, le_sigungu
+
+# Load trained models and label encoders
+models, le_sido, le_sigungu = train_models()
+
 # 데이터 로드
 data = load_data()
 # st.write(data)
@@ -30,29 +63,7 @@ plt.rcParams['axes.unicode_minus'] = False
 # 스트림릿 타이틀
 st.title('시도/시군구 폐기물 발생량 예측')
 
-# Encode categorical variables
-le_sido = LabelEncoder()
-le_sigungu = LabelEncoder()
-
 sido_text = data['시도'].unique()
-data['시도_encoded'] = le_sido.fit_transform(data['시도'])
-data['시군구_encoded'] = le_sigungu.fit_transform(data['시군구'])
-
-# Define features and targets
-features = ['발생년도', '시도_encoded', '시군구_encoded']
-targets = ['전체발생량', '총계_재활용', '총계_소각', '총계_매립']
-X = data[features]
-y = data[targets]
-
-# Split the data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Train models
-models = {}
-for target in targets:
-    model = xgb.XGBRegressor(objective='reg:squarederror', random_state=42)
-    model.fit(X_train, y_train[target])
-    models[target] = model
 
 # Prediction function
 def predict_waste(year, sido, sigungu):
@@ -64,7 +75,7 @@ def predict_waste(year, sido, sigungu):
         '시군구_encoded': [sigungu_encoded]
     })
     predictions = {}
-    for target in targets:
+    for target in models.keys():
         predictions[target] = models[target].predict(input_data)[0]
     return predictions
 
